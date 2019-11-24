@@ -81,6 +81,11 @@ export default {
 };
 ```
 
+## Todo
+
+- [ ] 支持单例模式
+- [X] 基础模块
+
 ## License
 
 The MIT License (MIT)
