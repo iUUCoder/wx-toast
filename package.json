@@ -4,11 +4,12 @@
   "description": "一个纯 JS 实现的工具库，用于解决微信小程序 showToast 和 showLoading 使用同一个单例，造成的冲突问题。",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run build -- -w",
+    "build": "rollup --config rollup.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://m.baidu.com"
+    "url": "https://github.com/iUUCoder/wx-toast"
   },
   "keywords": [
     "wechat",
@@ -19,5 +20,11 @@
     "minapp"
   ],
   "author": "UUCoder",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "rollup": "^1.27.3",
+    "rollup-plugin-babel": "^4.3.3"
+  }
 }
