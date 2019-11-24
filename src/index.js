@@ -40,16 +40,16 @@ class WxToast {
      * @param {?object} options Toast 参数
      */
   _setToast (options) {
-    setTimeout(() => {
-      if (options) {
+    if (options) {
+      setTimeout(() => {
         this._showToast({
           ...options,
           duration: HOLD_DURATION
         })
-      } else {
-        this._hideToast()
-      }
-    }, 0)
+      }, 0)
+    } else {
+      this._hideToast()
+    }
   }
 
   /**

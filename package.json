@@ -1,6 +1,6 @@
 {
   "name": "wx-toast",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "一个纯 JS 实现的工具库，用于解决微信小程序 showToast 和 showLoading 使用同一个单例，造成的冲突问题。",
   "main": "dist/index.js",
   "scripts": {
