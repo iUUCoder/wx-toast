@@ -5,7 +5,8 @@ const DEFAULT_OPTIONS = {
   showToast: wx.showToast, // 底层的展示 Toast 方法
   hideToast: wx.hideToast, // 底层的隐藏 Toast 方法
   defaultDuration: 1500, // Toast 默认展示时长
-  callbackWhenAbort: false // 主动隐藏 Toast 和 Loading 时，是否触发 hide 回调
+  callbackWhenAbort: false, // 主动隐藏 Toast 和 Loading 时，是否触发 hide 回调
+  debug: false // 调试模式
 }
 
 // 自维护定时器处理 Toas 展示和隐藏
@@ -23,16 +24,24 @@ class WxToast {
      * @param {?Function} [hideToast=wx.hideToast] 隐藏 Toast 的底层方法，默认为 wx.hideToast
      * @param {?number} [defaultDuration=1500] Toast 展示时长的默认值
      * @param {?boolean} [callbackWhenAbort=false] 主动隐藏 Toast 和 Loading 时，是否触发 hide 回调
+     * @param {?boolean} [debug=false] 是否开启调试，开启后会输出日志
      */
   constructor (options = {}) {
+    this._log('constructor: ', arguments)
+
     // 底层配置
     this._showToast = options && typeof options.showToast === 'function' ? options.showToast : DEFAULT_OPTIONS.showToast
     this._hideToast = options && typeof options.hideToast === 'function' ? options.hideToast : DEFAULT_OPTIONS.hideToast
     this._defaultDuration = options && options.defaultDuration > 0 ? options.defaultDuration : DEFAULT_OPTIONS.defaultDuration
     this._callbackWhenAbort = options && typeof options.callbackWhenAbort === 'boolean' ? options.callbackWhenAbort : DEFAULT_OPTIONS.callbackWhenAbort
+    this._debug = options && typeof options.debug === 'boolean' ? options.debug : DEFAULT_OPTIONS.debug
 
     // 队列
     this._queue = []
+  }
+
+  _log () {
+    return this._debug ? console.log.call(console.log, '[WxToast] ', ...arguments) : undefined
   }
 
   /**
@@ -40,6 +49,8 @@ class WxToast {
      * @param {?object} options Toast 参数
      */
   _setToast (options) {
+    this._log('_setToast: ', arguments)
+
     if (options) {
       setTimeout(() => {
         this._showToast({
@@ -60,6 +71,8 @@ class WxToast {
      * @param {object} [params.options={}] 传递给底层 Toast 的参数
      */
   _addItemToQueue ({ key = createKey(), type = 'toast', options = {} }) {
+    this._log('_addItemToQueue: ', arguments)
+
     this._setToast(options)
     this._queue.push({ key, type, options })
 
@@ -79,6 +92,8 @@ class WxToast {
      * @param {?boolean} [params.abort=false] 是否是调用 hideToast 或 hideLoading 方法主动移除的
      */
   _removeItemFromQueue ({ key, type = 'toast', abort = false }) {
+    this._log('_removeItemFromQueue: ', arguments)
+
     // 过滤队列
     const targets = []
     const queue = this._queue.filter(item => {
@@ -114,6 +129,8 @@ class WxToast {
      * @returns {string} Toast 的唯一标识
      */
   showToast (options = {}) {
+    this._log('showToast: ', arguments)
+
     const key = createKey()
     const opt = Object.assign({}, options)
     this._addItemToQueue({ key, type: 'toast', options: opt })
@@ -125,6 +142,8 @@ class WxToast {
      * @param {?string} key Toast 的唯一标识，不传则清理队列中所有 Toast
      */
   hideToast (key) {
+    this._log('hideToast: ', arguments)
+
     this._removeItemFromQueue({ key, type: 'toast', abort: true })
   }
 
@@ -135,6 +154,8 @@ class WxToast {
      * @returns {string} Loading 的唯一标识
      */
   showLoading (options) {
+    this._log('showLoading: ', arguments)
+
     const key = createKey()
     const opt = Object.assign({}, options, { icon: 'loading', mask: true })
     this._addItemToQueue({ key, type: 'loading', options: opt })
@@ -146,6 +167,8 @@ class WxToast {
      * @param {?string} key Loading 的唯一标识，不传则清理队列中所有 Loading
      */
   hideLoading (key) {
+    this._log('hideLoading: ', arguments)
+
     this._removeItemFromQueue({ key, type: 'loading' })
   }
 }
